@@ -1,0 +1,9 @@
+#!/bin/sh
+
+set -e
+git svn fetch
+git merge git-svn
+gclient sync --force --jobs=16
+#git cl rebase
+#gclient sync --nohooks --jobs=4
+#gclient runhooks
