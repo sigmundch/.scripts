@@ -1,10 +1,10 @@
+#!/bin/bash
 SDK_DIR=$(dirname $DART_EDITOR_HOME)
 
 if [[ "$SDK_DIR" != "$PWD" ]]; then
   echo "Run only from your SDK installation dir: $SDK_DIR"
   exit 1
 fi
-exit 1
 
 
 BASE_URI=http://gsdview.appspot.com/dart-archive/channels
@@ -60,6 +60,7 @@ function info {
   echo -e "[33m   $1[0m"
 }
 
+# needs 'sudo apt-get install gawk'
 function read_version {
   awk '/"revision"/ { print gensub(/.*: "(.*)",/, "\\1", 1) }' $1
 }
@@ -90,7 +91,7 @@ function update {
   if [[ -f $zipname ]]; then
     step "updating tree."
     rm -r dart/
-    unzip $zipname >> log.txt
+    unzip $zipname >> $SDK_DIR/log.txt
     cp VERSION VERSION.$desired
     mv VERSION LAST_VERSION
     mv $zipname $desired.zip
@@ -99,8 +100,8 @@ function update {
   fi
 }
 
-pushd `dirname $0` >> log.txt
+pushd $SDK_DIR >> $SDK_DIR/log.txt
 step "compare versions"
 compare || update
 step "done -- current version: $desired // $(cat LAST_VERSION | xargs echo)"
-popd >> log.txt
+popd >> $SDK_DIR/log.txt
