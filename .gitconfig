@@ -1,0 +1,22 @@
+[color]
+	branch = auto
+	diff = auto
+	status = auto
+	grep = auto
+[instaweb]
+	local = false
+[alias]
+	diff-tree = diff-tree --find-copies-harder
+	diff = diff --find-copies-harder
+	slog = log --abbrev-commit --pretty=oneline --decorate -10
+	glog = log --abbrev-commit --pretty=oneline --decorate -10 --graph
+[merge]
+	tool = gvimdiff
+[diff]
+	tool = gvimdiff
+[difftool]
+  prompt = false
+[credential]
+	helper = cache --timeout=3600
+[push]
+	default = simple
