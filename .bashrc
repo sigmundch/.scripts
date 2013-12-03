@@ -55,6 +55,10 @@ function voff {
   PROMPT_COMMAND='echo -en "\033]0;${USER}@${HOSTNAME}: ${PWD/$HOME/~}\007"'
 }
 
+function named_prompt {
+  PS1="\[\033[01;31m\]|--[\[\033[0m\]$1\[\033[31;1m\]]\[\033[0m\] "
+}
+
 PS1='\[\033[01;31m\]`if [ \u != $MY_USER ]; then echo "\u "; fi``if [ \h != $MY_MACHINE ]; then echo "[@\h]"; else echo "|"; fi`\[\033[0m\] '
 
 von;
