@@ -97,7 +97,7 @@ augroup END
 
 " map gc to make the current working directory that of the file we are editing.
 nmap gc :cd %:h<cr>
-nmap gu :cd ..<cr>
+nmap g<Up> :cd ..<cr>
 
 " better matching with %
 runtime macros/matchit.vim
