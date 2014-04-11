@@ -17,7 +17,8 @@ location_name="dev"
 version="latest"
 desired=""
 current=""
-zipname="darteditor-linux-x64.zip"
+#zipname="darteditor-linux-x64.zip"
+zipname="darteditor-linux-ia32.zip"
 case $1 in
   "dev")
     location=$DEV_URI
@@ -95,6 +96,9 @@ function update {
     cp VERSION VERSION.$desired
     mv VERSION LAST_VERSION
     mv $zipname $desired.zip
+
+    step "creating dartium symlink"
+    ln -s $SDK_DIR/dart/chromium/chrome $SDK_DIR/dart/dart-sdk/bin/dartium
   else
     step "error in download, stop"
   fi

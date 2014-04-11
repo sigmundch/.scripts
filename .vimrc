@@ -2,6 +2,7 @@
 colorscheme desert
 
 syn on
+set clipboard=unnamed
 set laststatus=2
 set hlsearch
 set incsearch
