@@ -82,6 +82,7 @@ export MY_DART_SDK=$DART_EDITOR_HOME/dart-sdk
 export PATH=$SCRIPT_DIR/bin:~/bin/depot_tools:$PATH:$MY_DART_SDK/bin:$DART_DRT_HOME:/usr/local/lib/node_modules/
 alias dartium=$DART_EDITOR_HOME/chromium/chrome
 alias editor="PATH=$JAVA_HOME/bin:$PATH $DART_EDITOR_HOME/DartEditor"
+export GYP_GENERATORS="ninja"
 
 source $SCRIPT_DIR/bin/load_all.sh
 

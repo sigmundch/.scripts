@@ -2,7 +2,7 @@
 colorscheme desert
 
 syn on
-set clipboard=unnamed
+"set clipboard=unnamed
 set laststatus=2
 set hlsearch
 set incsearch
@@ -48,7 +48,8 @@ match CursorLine /\%'[.*\%']/
 "123456789012345678901234567890123456789012345678901234567890123456789012345678901234567890123456789012345678901234567890123456789
 "         |         |         |         |         |         |         |         |         |         |         |         |
 
-set colorcolumn=81,101
+set colorcolumn=81
+au BufNewFile,BufRead,BufEnter *.java set colorcolumn=101
 hi ColorColumn guibg=#3A3A3A ctermbg=237
 
 vmap <tab> >gv
@@ -89,11 +90,6 @@ augroup filetypedetect
 au BufNewFile,BufRead *.html,*.java,*.js,*.c,*.cpp,*.h,*.dart syn spell notoplevel
 au BufNewFile,BufRead,BufWritePost,BufEnter,BufLeave *.java,*.js,*.dart set cino==j1,+2s,(4,g1,h1
 au BufNewFile,BufRead,BufWritePost,BufEnter,BufLeave *.java,*.js set textwidth=80
-au BufNewFile,BufRead,BufEnter *Test.java colorscheme slate
-au BufNewFile,BufRead,BufEnter *Test.java hi cursorline guibg=#440044
-au BufNewFile,BufRead,BufEnter *Test.java hi ColorColumn guibg=#3A3A3A ctermbg=blue
-au BufLeave *Test.java colorscheme desert
-au BufLeave *Test.java hi ColorColumn guibg=#3A3A3A ctermbg=blue
 augroup END
 
 " map gc to make the current working directory that of the file we are editing.
