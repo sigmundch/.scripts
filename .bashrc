@@ -12,6 +12,7 @@ export HISTCONTROL=ignoreboth
 
 # update the values of LINES and COLUMNS after each command, if needed
 shopt -s checkwinsize
+shopt -s histappend
 
 # make less more friendly for non-text input files, see lesspipe(1)
 [ -x /usr/bin/lesspipe ] && eval "$(lesspipe)"
@@ -82,7 +83,7 @@ export MY_DART_SDK=$DART_EDITOR_HOME/dart-sdk
 export PATH=$SCRIPT_DIR/bin:~/bin/depot_tools:$PATH:$MY_DART_SDK/bin:$DART_DRT_HOME:/usr/local/lib/node_modules/
 alias dartium=$DART_EDITOR_HOME/chromium/chrome
 alias editor="PATH=$JAVA_HOME/bin:$PATH $DART_EDITOR_HOME/DartEditor"
-export GYP_GENERATORS="ninja"
+export GYP_GENERATORS="ninja,make"
 
 source $SCRIPT_DIR/bin/load_all.sh
 
@@ -94,6 +95,10 @@ function fix_bashrc {
 
 function reload_bashrc {
      source ~/.bashrc;
+}
+
+function append_and_reload_history {
+  history -a; history -c; history -r
 }
 
 export GREP_OPTIONS="--color=auto"
