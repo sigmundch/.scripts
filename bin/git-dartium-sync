@@ -1,0 +1,33 @@
+#!/bin/sh
+
+set -e
+dir=$PWD
+while [[ ! -e $dir/.gclient ]]; do
+  dir=$(dirname $dir)
+  if [[ $dir == "/" ]]; then
+    echo "Not in a dartium enlistment";
+    exit 1
+  fi
+done
+
+is_dartium=$(grep -q dartium.deps $dir/.gclient && echo "yes")
+if [[ is_dartium == "" ]]; then
+  echo "In a gclient, but not a dartium enlistment.";
+  exit 1
+fi
+
+echo "1. sync src"
+cd $dir/src/
+git svn fetch
+git merge git-svn
+echo "2. sync dart"
+cd $dir/src/dart/
+git svn fetch
+git merge git-svn
+echo "3. sync webkit"
+cd $dir/src/third_party/WebKit
+git svn fetch
+git merge git-svn
+echo "4. gclient sync"
+cd $dir
+gclient sync --force --jobs=16
