@@ -1,9 +1,25 @@
 #!/bin/sh
-
 set -e
-git svn fetch
-git merge git-svn
-gclient sync --force --jobs=16
-#git cl rebase
-#gclient sync --nohooks --jobs=4
-#gclient runhooks
+
+function sync_through_merge {
+  git svn fetch
+  git merge git-svn
+  if [[ $# -eq 0 || "$1" != "quick" ]]; then
+    gclient sync --force --jobs=16
+  fi
+}
+
+function sync_through_rebase {
+  git cl rebase
+  if [[ $# -eq 0 || "$1" != "quick" ]]; then
+    gclient sync --nohooks --jobs=4
+    gclient runhooks
+  fi
+}
+
+if [[ $# -gt 0 && "$1" == "rebase" ]]; then
+  shift
+  sync_through_rebase $@
+else
+  sync_through_merge $@
+fi

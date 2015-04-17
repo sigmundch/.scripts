@@ -1,0 +1,48 @@
+#!/usr/bin/env dart
+import 'dart:io' show Process;
+
+/// This script finds landed `git cl` branches and prints them.
+/// The output can be piped to `xargs git branch -D` for example.
+main(args) {
+  bool findDead = true;
+  bool findLive = true;
+  String issueId;
+  if (args.length > 0) {
+    if (args[0] == 'dead') {
+      findLive = false;
+    } else if (args[0] == 'live') {
+      findDead = false;
+    } else {
+      issueId = args[0];
+    }
+  }
+
+  var result = Process.runSync('git', ['config', '-l']);
+  if (result.exitCode != 0) exit(result.exitCode);
+  var matches = new RegExp(r'^branch\.(.+)\.([^\.=]+)=(\w+)', multiLine: true)
+      .allMatches(result.stdout);
+  var info = {};
+  for (var match in matches) {
+    var name = match[1];
+    var branch = info.putIfAbsent(name, () => new Branch(name));
+    if (match[2] == 'rietveldserver') branch.hasServer = true;
+    if (match[2] == 'rietveldissue') branch.issueId = match[3];
+  }
+  for (var branch in info.values) {
+    var suffix = issueId != null && branch.issueId == issueId ? ' *' : '';
+    if (findDead && !branch.isLive) print('$branch$suffix');
+    if (findLive && branch.isLive) print('$branch$suffix');
+  }
+}
+
+class Branch {
+  final String name;
+  get isLive => hasServer && issueId != null;
+  bool hasServer;
+  String issueId;
+  Branch(this.name);
+
+  toString() => '(${isLive ? '[32mlive[0m': '[31mdead[0m'}) $name';
+}
+
+// vim: set filetype=dart:
