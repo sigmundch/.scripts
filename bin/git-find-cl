@@ -29,9 +29,10 @@ main(args) {
     if (match[2] == 'rietveldissue') branch.issueId = match[3];
   }
   for (var branch in info.values) {
-    var suffix = issueId != null && branch.issueId == issueId ? ' *' : '';
-    if (findDead && !branch.isLive) print('$branch$suffix');
-    if (findLive && branch.isLive) print('$branch$suffix');
+    if (findDead && !branch.isLive) branch.prettyPrint();
+    if (findLive && branch.isLive) {
+      branch.prettyPrint(highlight: issueId == branch.issueId);
+    }
   }
 }
 
@@ -42,7 +43,17 @@ class Branch {
   String issueId;
   Branch(this.name);
 
-  toString() => '(${isLive ? '[32mlive[0m': '[31mdead[0m'}) $name';
+  prettyPrint({bool highlight}) {
+    var liveColor = highlight ? '32;1m' : '32m';
+    var sb = new StringBuffer()
+      ..write(name)
+      ..write(':')
+      ..write(' ' * (30 - name.length))
+      ..write(isLive ? '[$liveColor' : '[31m')
+      ..write(isLive ? (highlight ? '$issueId <--' : issueId) : 'dead')
+      ..write('[0m');
+    print('$sb');
+  }
 }
 
 // vim: set filetype=dart:
