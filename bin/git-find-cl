@@ -19,8 +19,8 @@ main(args) {
 
   var result = Process.runSync('git', ['config', '-l']);
   if (result.exitCode != 0) exit(result.exitCode);
-  var matches = new RegExp(r'^branch\.(.+)\.([^\.=]+)=(\w+)', multiLine: true)
-      .allMatches(result.stdout);
+  var matches = new RegExp(r'^branch\.(.+)\.(rietveld[^\.=]+)=(\w+)',
+      multiLine: true).allMatches(result.stdout);
   var info = {};
   for (var match in matches) {
     var name = match[1];
