@@ -1,5 +1,24 @@
 #!/usr/bin/env dart
-import 'dart:io' show Process;
+import 'dart:io' show Process, exit;
+
+printUsage() {
+  print('''
+usage: git find-cl [option]
+  Show all git branches that are associated with a rietveld issue, and the
+  corresponding issue number if it's available.
+
+  Note: this doesn't check if the issue has been closed in the rietveld server,
+  it only checks that there is an issue number associated with a local branch
+  and whether there was an issue entry for the branch in the past.
+
+Possible options:
+  dead           show only branches missing a issue number.
+  live           show only branches with a corresponding issue number.
+  issue#         show all branches, but highlight the one matching your issue
+                 number
+  -h or --help   print this message.
+''');
+}
 
 /// This script finds landed `git cl` branches and prints them.
 /// The output can be piped to `xargs git branch -D` for example.
@@ -8,6 +27,11 @@ main(args) {
   bool findLive = true;
   String issueId;
   if (args.length > 0) {
+    if (args[0] == '-h' || args[0] == '--help') {
+      printUsage();
+      exit(0);
+    }
+
     if (args[0] == 'dead') {
       findLive = false;
     } else if (args[0] == 'live') {
