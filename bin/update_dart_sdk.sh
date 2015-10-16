@@ -1,13 +1,19 @@
 #!/bin/bash
-SDK_DIR=$(dirname $DART_EDITOR_HOME)
 
-if [[ "$SDK_DIR" != "$PWD" ]]; then
-  echo "Run only from your SDK installation dir: $SDK_DIR"
+if [[ "$DART_SDK_HOME" == "" ]]; then
+  echo "Please define DART_SDK_HOME to point to your SDK installation dir"
   exit 1
 fi
 
+if [[ `which gsutil` == "" ]]; then
+  echo "Make sure you have installed gsutil and include it in your path"
+  exit 1
+fi
 
-BASE_URI=http://gsdview.appspot.com/dart-archive/channels
+# TODO add also support for:
+# https://storage.googleapis.com/dart-archive/channels/stable/release/latest/dartium/dartium-linux-x64-release.zip
+SDK_DIR=$(dirname $DART_SDK_HOME)
+BASE_URI=gs://dart-archive/channels
 DEV_URI=$BASE_URI/dev/raw
 STABLE_URI=$BASE_URI/stable/raw
 BE_URI=$BASE_URI/be/raw
@@ -18,7 +24,8 @@ version="latest"
 desired=""
 current=""
 #zipname="darteditor-linux-x64.zip"
-zipname="darteditor-linux-ia32.zip"
+zipname="dartsdk-linux-ia32-release.zip"
+#zipname="darteditor-linux-ia32.zip"
 case $1 in
   "dev")
     location=$DEV_URI
@@ -63,11 +70,11 @@ function info {
 
 # needs 'sudo apt-get install gawk'
 function read_version {
-  awk '/"revision"/ { print gensub(/.*: "(.*)",/, "\\1", 1) }' $1
+  awk '/"revision"/ { print gensub(/.*: "(.*)",?/, "\\1", 1) }' $1
 }
 
 function compare {
-  wget $location/$version/VERSION
+  gsutil cp $location/$version/VERSION .
   desired=$(read_version VERSION)
   current=$(read_version LAST_VERSION)
   info "Current version:     $current"
@@ -76,7 +83,7 @@ function compare {
     return 1
   fi
   step "already up to date. "
-  rm VERSION 
+  rm VERSION
 }
 
 function update {
@@ -86,19 +93,19 @@ function update {
     cp VERSION.$desired VERSION
   else
     step "no cached version found: downloading..."
-    wget $location/$version/editor/$zipname
+    gsutil cp $location/$version/sdk/$zipname .
   fi
 
   if [[ -f $zipname ]]; then
     step "updating tree."
-    rm -r dart/
+    rm -r dart-sdk/
     unzip $zipname >> $SDK_DIR/log.txt
     cp VERSION VERSION.$desired
     mv VERSION LAST_VERSION
     mv $zipname $desired.zip
 
-    step "creating dartium symlink"
-    ln -s $SDK_DIR/dart/chromium/chrome $SDK_DIR/dart/dart-sdk/bin/dartium
+    #step "creating dartium symlink"
+    #ln -s $SDK_DIR/dart/chromium/chrome $SDK_DIR/dart/dart-sdk/bin/dartium
   else
     step "error in download, stop"
   fi
