@@ -43,6 +43,10 @@ autocmd BufEnter * setlocal cursorline
 hi CursorLine guibg=#444444 cterm=none ctermbg=237
 hi LineNr     guifg=#CCCCCC guibg=#333333
 hi CursorColumn guibg=#2a2a2a cterm=none ctermbg=234
+
+" these are used by syntastic and YCM to show errors and warnings
+hi SpellBad    term=none ctermbg=none cterm=undercurl ctermfg=Red gui=undercurl guisp=Red
+hi SpellCap    term=none ctermbg=none cterm=undercurl ctermfg=Magenta gui=undercurl guisp=Magenta
 set cursorcolumn
 match CursorLine /\%'[.*\%']/
 "123456789012345678901234567890123456789012345678901234567890123456789012345678901234567890123456789012345678901234567890123456789

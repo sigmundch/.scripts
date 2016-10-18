@@ -1,4 +1,4 @@
-# Usage: load .bashrc, define ahead: HOME, MY_MACHINE, DART_EDITOR_HOME
+# Usage: load .bashrc, define ahead: HOME, MY_MACHINE, DART_EDITOR_HOME, DART_SDK_HOME
 
 # If not running interactively, don't do anything
 [ -z "$PS1" ] && return
@@ -23,11 +23,27 @@ function long_prompt_command {
   local red_bold="[01;31m"
   local none="[0m"
   local green="[0;32m"
+  local light_gray="[0;38;5;240m"
+  local light_red="[0;38;5;88m"
   echo -en "\033]0;${USER}@${HOSTNAME}: ${PWD/$HOME/~}\007"
   echo -en "$red_bold|--[$green$(formatted_date)$none ";
   show_git_branch;
   show_and_update_client;
   echo -e "$red_bold]--|$none"
+}
+
+function long_prompt_command2 {
+  local red_bold="[01;31m"
+  local none="[0m"
+  local green="[0;32m"
+  local light_gray="[0;38;5;240m"
+  local light_red="[0;38;5;88m"
+  echo -en "\033]0;${USER}@${HOSTNAME}: ${PWD/$HOME/~}\007"
+  echo -e "$red_bold|$light_red--$light_gray end:   $green$(formatted_date)"
+  echo -en "$red_bold|$light_red--$light_gray ";
+  show_git_branch;
+  show_and_update_client;
+  echo -e "$none"
 }
 
 function show_and_update_client {
@@ -79,8 +95,8 @@ alias ls='ls --color=auto'
 
 # Dart
 export DART_DRT_HOME=$DART_EDITOR_HOME/chromium/
-export MY_DART_SDK=$DART_EDITOR_HOME/dart-sdk
-export PATH=$SCRIPT_DIR/bin:~/bin/depot_tools:$PATH:$MY_DART_SDK/bin:$DART_DRT_HOME:/usr/local/lib/node_modules/
+#export MY_DART_SDK=$DART_EDITOR_HOME/dart-sdk
+export PATH=$SCRIPT_DIR/bin:~/bin/depot_tools:$PATH:$DART_SDK_HOME/bin:$DART_DRT_HOME:/usr/local/lib/node_modules/
 alias dartium=$DART_EDITOR_HOME/chromium/chrome
 alias editor="PATH=$JAVA_HOME/bin:$PATH $DART_EDITOR_HOME/DartEditor"
 export GYP_GENERATORS="ninja,make"
@@ -101,6 +117,10 @@ function append_and_reload_history {
   history -a; history -c; history -r
 }
 
+function notify_done {
+  notify-send "We are done! $@" -i  $([[ $? == 0 ]] && echo "info" || echo "error")
+}
+
 export GREP_OPTIONS="--color=auto"
 
 alias v='gvim --remote-silent'
@@ -108,3 +128,26 @@ alias v='gvim --remote-silent'
 # enable us_intl keyboard and toggling with alt+shift:
 # setxkbmap -option grp:switch,grp:shifts_toggle us,us_intl
 # see file /usr/share/X11/xkb/symbols/group for more group descriptions...
+
+function before_command2 {
+  [ -n "$COMP_LINE" ] && return 
+  [ "$BASH_COMMAND" = "$PROMPT_COMMAND" ] && return
+  local red_bold="[01;31m"
+  local none="[0m"
+  local green="[0;32m"
+  local light_gray="[0;38;5;240m"
+  local light_red="[0;38;5;88m"
+  echo -e "$red_bold|$light_red--$light_gray start: $green$(formatted_date)$none";
+}
+
+function before_command {
+  [ -n "$COMP_LINE" ] && return 
+  [ "$BASH_COMMAND" = "$PROMPT_COMMAND" ] && return
+  local red_bold="[01;31m"
+  local none="[0m"
+  local green="[0;32m"
+  local light_gray="[0;38;5;240m"
+  local light_red="[0;38;5;88m"
+  echo -e "$red_bold|$light_red--$light_gray start time: $(formatted_date)$none";
+}
+trap 'before_command' DEBUG

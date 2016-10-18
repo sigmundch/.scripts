@@ -24,7 +24,8 @@ version="latest"
 desired=""
 current=""
 #zipname="darteditor-linux-x64.zip"
-zipname="dartsdk-linux-ia32-release.zip"
+#zipname="dartsdk-linux-ia32-release.zip"
+zipname="dartsdk-linux-x64-release.zip"
 #zipname="darteditor-linux-ia32.zip"
 case $1 in
   "dev")
