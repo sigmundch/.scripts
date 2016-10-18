@@ -1,0 +1,1 @@
+ git diff master --raw | grep " [AM]	" | awk '{print $6}' | grep -v tests | grep ".dart$" | xargs dartfmt -w
