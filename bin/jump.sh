@@ -41,9 +41,9 @@ alias ja='add_jump';
 alias je='edit_jump';
 alias jjr='reload_jump';
 
-add_fix jump.sh jj jump
-add_fix jump.sh ja add_jump
-add_fix jump.sh je edit_jump
-add_fix jump.sh jjr reload_jump
+#add_fix jump.sh jj jump
+#add_fix jump.sh ja add_jump
+#add_fix jump.sh je edit_jump
+#add_fix jump.sh jjr reload_jump
 
 reload_complete jj ~/.jumpdirs;

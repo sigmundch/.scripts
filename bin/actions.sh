@@ -41,7 +41,7 @@ alias aar='reload_actions';
 reload_complete aa ~/.actionlist;
 reload_complete ag ~/.actionlist;
 
-add_fix actions.sh aa aa;
-add_fix actions.sh ae edit_actions;
-add_fix actions.sh ag grep_actions;
-add_fix actions.sh aar reload_actions;
+#add_fix actions.sh aa aa;
+#add_fix actions.sh ae edit_actions;
+#add_fix actions.sh ag grep_actions;
+#add_fix actions.sh aar reload_actions;

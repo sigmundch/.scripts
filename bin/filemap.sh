@@ -36,6 +36,7 @@ function filemap_keyExists() {
 # $2 - value to highlight 
 function filemap_showValues() {
   local file=$1;
+  [[ -e $file ]] || touch $file
   local value="------novalue------";
   if [[ $# -ge 2 ]]; then 
     value=$2;
