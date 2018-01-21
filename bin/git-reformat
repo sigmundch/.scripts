@@ -1,1 +1,16 @@
- git diff master --raw | grep " [AM]	" | awk '{print $6}' | grep -v tests | grep ".dart$" | xargs dartfmt -w
+#!/bin/bash
+dartfmt=tools/sdks/linux/dart-sdk/bin/dartfmt
+if [[ "$1" == '--be' ]]; then
+  dartfmt=out/ReleaseX64/dart-sdk/bin/dartfmt
+elif [[ "$1" == '--golem' ]]; then
+  dartfmt=third_party/dart-sdk/bin/dartfmt
+fi
+
+git diff $(git merge-base master HEAD) --no-renames --raw \
+  | grep " [AM]	" \
+  | awk '{print $6}' \
+  | grep ".dart$" \
+  | xargs $dartfmt -w
+
+#git diff master --name-only | grep ".dart$" | xargs dartfmt -w
+#git diff master --raw | grep " [AM]	" | awk '{print $6}' | grep -v tests | grep ".dart$" | xargs dartfmt -w

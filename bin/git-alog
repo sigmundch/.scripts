@@ -1,1 +1,4 @@
-git log --pretty="[33m%h[0m %ae %s" -10 $@ | sed -e "s/sigmund@google.com/[31;1m*[0m/" | sed -e "s/ \w\+@google.com/  /"
+if [[ ! -v AUTHOR ]]; then
+  AUTHOR=sigmund
+fi
+git log --pretty="[33m%h[0m %ae %s" -10 $@ | sed -e "s/$AUTHOR@google.com/[31;1m*[0m/" | sed -e "s/ \w\+@google.com/  /"

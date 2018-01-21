@@ -57,9 +57,15 @@ function formatted_date {
 function show_git_branch {
   local cyan="[36m"
   local none="[0m"
+  local git_file="$(git rev-parse --show-cdup 2>/dev/null).git"
   local head_file="$(git rev-parse --show-cdup 2>/dev/null).git/HEAD"
+  local worktree=""
+  if [ -f $git_file ]; then
+    worktree="*:"
+    head_file="$(cat $git_file | sed -e "s,gitdir: \(.*\),\1,")/HEAD"
+  fi
   if [ -f $head_file ]; then
-    (cat $head_file | sed -e "s,.*heads/\(.*\), $cyan(\1)$none," |
+    (cat $head_file | sed -e "s,.*heads/\(.*\), $cyan($worktree\1)$none," |
       xargs echo -en)
   fi
 }
@@ -96,7 +102,7 @@ alias ls='ls --color=auto'
 # Dart
 export DART_DRT_HOME=$DART_EDITOR_HOME/chromium/
 #export MY_DART_SDK=$DART_EDITOR_HOME/dart-sdk
-export PATH=$SCRIPT_DIR/bin:~/bin/depot_tools:$PATH:$DART_SDK_HOME/bin:$DART_DRT_HOME:/usr/local/lib/node_modules/
+export PATH=$SCRIPT_DIR/bin:~/bin/depot_tools:$PATH:$DART_SDK_HOME/bin:$DART_DRT_HOME:/usr/local/lib/node_modules/:$HOME/bin/
 alias dartium=$DART_EDITOR_HOME/chromium/chrome
 alias editor="PATH=$JAVA_HOME/bin:$PATH $DART_EDITOR_HOME/DartEditor"
 export GYP_GENERATORS="ninja,make"
@@ -151,3 +157,6 @@ function before_command {
   echo -e "$red_bold|$light_red--$light_gray start time: $(formatted_date)$none";
 }
 trap 'before_command' DEBUG
+
+export FZF_DEFAULT_OPTS='-e'
+export GOMA_DIR=$HOME/bin/goma/

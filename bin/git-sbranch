@@ -1,0 +1,3 @@
+git branch --sort=-committerdate --contains="`git rev-parse master@{2.weeks.ago}`" \
+      --format="%(align:45,left)%(if)%(HEAD)%(then) * %1b[32m%(else)   %1b[01m%(end)%(refname:short)%1b[0m:%(end) %(subject)"
+

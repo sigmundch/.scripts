@@ -1,8 +1,9 @@
 "set t_Co=8 "change to use 8 colors only, useful when doing ssh over browser.
-colorscheme desert
+colorscheme desert_modified
 
 syn on
 "set clipboard=unnamed
+set hidden
 set laststatus=2
 set hlsearch
 set incsearch
@@ -23,6 +24,7 @@ set printoptions+=number:y
 set guioptions=ag
 set matchpairs=(:),{:},[:],<:>
 set textwidth=80
+set wildmode=longest:full,full
 set wildmenu
 "set noloadplugins
 "set spell
@@ -47,6 +49,7 @@ hi CursorColumn guibg=#2a2a2a cterm=none ctermbg=234
 " these are used by syntastic and YCM to show errors and warnings
 hi SpellBad    term=none ctermbg=none cterm=undercurl ctermfg=Red gui=undercurl guisp=Red
 hi SpellCap    term=none ctermbg=none cterm=undercurl ctermfg=Magenta gui=undercurl guisp=Magenta
+
 set cursorcolumn
 match CursorLine /\%'[.*\%']/
 "123456789012345678901234567890123456789012345678901234567890123456789012345678901234567890123456789012345678901234567890123456789
@@ -66,7 +69,7 @@ vmap <c-o> :sort/.*/ur<CR>
 
 autocmd FileType make setlocal noet sw=8 sts=8
 
-au Syntax dart runtime! syntax/dart.vim
+"au Syntax dart runtime! syntax/dart.vim
 au BufNewFile,BufRead *.dart set filetype=dart
 
 " Extra options for python
@@ -90,11 +93,6 @@ highlight DiffText guibg=#777777 ctermbg=244
 highlight DiffAdd guibg=#4f8867 ctermbg=29
 highlight DiffDelete guibg=#870000 ctermbg=88
 
-augroup filetypedetect
-au BufNewFile,BufRead *.html,*.java,*.js,*.c,*.cpp,*.h,*.dart syn spell notoplevel
-au BufNewFile,BufRead,BufWritePost,BufEnter,BufLeave *.java,*.js,*.dart set cino==j1,+2s,(4,g1,h1
-au BufNewFile,BufRead,BufWritePost,BufEnter,BufLeave *.java,*.js set textwidth=80
-augroup END
 
 " map gc to make the current working directory that of the file we are editing.
 nmap gc :cd %:h<cr>
@@ -124,3 +122,37 @@ function! DmenuOpen(cmd)
 endfunction
 map <Leader>f :call DmenuOpen("e")<cr>
 let java_allow_cpp_keywords=1
+
+
+" Configure how vim-lsc highlights errors.
+hi lscDiagnosticError term=none ctermbg=none cterm=undercurl ctermfg=Red gui=undercurl guisp=Red
+hi lscDiagnosticWarning term=none ctermbg=none cterm=undercurl ctermfg=Magenta gui=undercurl guisp=Magenta
+hi lscDiagnosticHint term=none ctermbg=none cterm=undercurl ctermfg=Cyan gui=undercurl guisp=Cyan
+hi lscDiagnosticInfo term=none ctermbg=none cterm=undercurl ctermfg=Grey gui=undercurl guisp=Grey
+
+call plug#begin('~/.vim/plugged')
+Plug 'natebosch/vim-lsc'
+Plug 'dart-lang/dart-vim-plugin'
+Plug 'airblade/vim-gitgutter'
+call plug#end()
+
+" LSC configuration
+let g:lsc_auto_map = v:true
+let g:lsc_server_commands = {'dart': 'dart_language_server_wrapper'}
+"let g:lsc_server_commands = {'dart': 'dart_language_server'}
+let g:lsc_preview_split_direction = 'below'
+let g:lsc_enable_apply_edit = v:true
+let g:lsc_enable_incremental_sync = v:true
+augroup completsplitbelow
+ autocmd User LSCAutocomplete setlocal splitbelow
+ autocmd CompleteDone * setlocal nosplitbelow
+ autocmd CompleteDone * silent! pclose
+augroup END
+"set completeopt-=preview
+set pvh=8
+
+augroup filetypedetect
+au BufNewFile,BufRead *.html,*.java,*.js,*.c,*.cpp,*.h,*.dart syn spell notoplevel
+au BufNewFile,BufRead,BufWritePost,BufEnter,BufLeave *.java,*.js set textwidth=80
+au BufNewFile,BufRead,BufWritePost,BufEnter,BufLeave *.java,*.js,*.dart set cino==j1,+2s,(4,g1,h1
+augroup END
