@@ -1,0 +1,7 @@
+#!/bin/sh
+
+input=$1
+path=$(echo $input | sed -e "s@package:\([^/]*\)/\(.*\)@pkg/\1/lib/\2@")
+path=$(echo $path | sed -e "s@file:///@/@")
+vim $(echo $path | sed -e "s@\(.*\):\([0-9]*\):\([0-9]*\)@\1 +\2@")
+
