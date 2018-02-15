@@ -138,8 +138,8 @@ call plug#end()
 
 " LSC configuration
 let g:lsc_auto_map = v:true
-let g:lsc_server_commands = {'dart': 'dart_language_server_wrapper'}
-"let g:lsc_server_commands = {'dart': 'dart_language_server'}
+"let g:lsc_server_commands = {'dart': 'dart_language_server_wrapper'}
+let g:lsc_server_commands = {'dart': 'dart_language_server'}
 let g:lsc_preview_split_direction = 'below'
 let g:lsc_enable_apply_edit = v:true
 let g:lsc_enable_incremental_sync = v:true

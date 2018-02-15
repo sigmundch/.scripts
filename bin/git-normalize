@@ -6,4 +6,5 @@ git diff $(git merge-base master HEAD) --no-renames --raw \
   | grep " [AM]	" \
   | awk '{print $6}' \
   | grep ".status$" \
+  | grep -v "pkg/front_end/" \
   | xargs $vm $normalize -w
