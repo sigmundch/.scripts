@@ -1,3 +1,4 @@
+#!/bin/sh
 # Usage: load .bashrc, define ahead: HOME, MY_MACHINE, DART_EDITOR_HOME, DART_SDK_HOME
 
 # If not running interactively, don't do anything
@@ -65,8 +66,7 @@ function show_git_branch {
     head_file="$(cat $git_file | sed -e "s,gitdir: \(.*\),\1,")/HEAD"
   fi
   if [ -f $head_file ]; then
-    (cat $head_file | sed -e "s,.*heads/\(.*\), $cyan($worktree\1)$none," |
-      xargs echo -en)
+    echo -en $(cat $head_file | sed -e "s,.*heads/\(.*\), $cyan($worktree\1)$none,")
   fi
 }
 
@@ -82,7 +82,8 @@ function named_prompt {
   PS1="\[\033[01;31m\]|--[\[\033[0m\]$1\[\033[31;1m\]]\[\033[0m\] "
 }
 
-PS1='\[\033[01;31m\]`if [ \u != $MY_USER ]; then echo "\u "; fi``if [ \h != $MY_MACHINE ]; then echo "[@\h]"; else echo "|"; fi`\[\033[0m\] '
+#PS1='\[\033[01;31m\]`if [ \u != $MY_USER ]; then echo "\u "; fi``if [ \h != $MY_MACHINE ]; then echo "[@\h]"; else echo "|"; fi`\[\033[0m\] '
+PS1='\[\033[01;31m\]|\[\033[0m\] '
 
 von;
 
@@ -97,7 +98,11 @@ export EDITOR='vim'
 
 
 # ls with colors
-alias ls='ls --color=auto'
+if [[ $(uname -s) != "Darwin" ]]; then
+  alias ls='ls --color=auto'
+else
+  alias ls='ls -G'
+fi
 
 # Dart
 export DART_DRT_HOME=$DART_EDITOR_HOME/chromium/
@@ -156,7 +161,10 @@ function before_command {
   local light_red="[0;38;5;88m"
   echo -e "$red_bold|$light_red--$light_gray start time: $(formatted_date)$none";
 }
-trap 'before_command' DEBUG
+
+if [[ $(uname -s) != "Darwin" ]]; then
+  trap 'before_command' DEBUG
+fi
 
 export FZF_DEFAULT_OPTS='-e'
 export GOMA_DIR=$HOME/bin/goma/

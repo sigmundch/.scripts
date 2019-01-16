@@ -1,5 +1,6 @@
 "set t_Co=8 "change to use 8 colors only, useful when doing ssh over browser.
-colorscheme desert_modified
+"colorscheme desert_modified
+colorscheme desert
 
 syn on
 "set clipboard=unnamed
@@ -138,8 +139,8 @@ call plug#end()
 
 " LSC configuration
 let g:lsc_auto_map = v:true
-let g:lsc_server_commands = {'dart': 'dart_language_server_wrapper'}
-"let g:lsc_server_commands = {'dart': 'dart_language_server'}
+"let g:lsc_server_commands = {'dart': 'dart_language_server_wrapper'}
+let g:lsc_server_commands = {'dart': 'dart_language_server'}
 let g:lsc_preview_split_direction = 'below'
 let g:lsc_enable_apply_edit = v:true
 let g:lsc_enable_incremental_sync = v:true
@@ -156,3 +157,9 @@ au BufNewFile,BufRead *.html,*.java,*.js,*.c,*.cpp,*.h,*.dart syn spell notoplev
 au BufNewFile,BufRead,BufWritePost,BufEnter,BufLeave *.java,*.js set textwidth=80
 au BufNewFile,BufRead,BufWritePost,BufEnter,BufLeave *.java,*.js,*.dart set cino==j1,+2s,(4,g1,h1
 augroup END
+
+"if has('vim_starting')
+"  set nocompatible
+"  set runtimepath+=~/.vim/bundle/dart-vim-plugin
+"endif
+"filetype plugin indent on

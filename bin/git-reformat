@@ -10,7 +10,7 @@ git diff $(git merge-base master HEAD) --no-renames --raw \
   | grep " [AM]	" \
   | awk '{print $6}' \
   | grep ".dart$" \
-  | xargs $dartfmt -w
+  | xargs dartfmt -w
 
 #git diff master --name-only | grep ".dart$" | xargs dartfmt -w
 #git diff master --raw | grep " [AM]	" | awk '{print $6}' | grep -v tests | grep ".dart$" | xargs dartfmt -w
