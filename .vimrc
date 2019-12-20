@@ -1,5 +1,5 @@
 "set t_Co=8 "change to use 8 colors only, useful when doing ssh over browser.
-colorscheme desert_modified
+colorscheme desert
 
 syn on
 "set clipboard=unnamed
@@ -132,18 +132,18 @@ hi lscDiagnosticInfo term=none ctermbg=none cterm=undercurl ctermfg=Grey gui=und
 
 call plug#begin('~/.vim/plugged')
 Plug 'natebosch/vim-lsc'
+Plug 'natebosch/vim-lsc-dart'
 Plug 'dart-lang/dart-vim-plugin'
-Plug 'airblade/vim-gitgutter'
+"Plug 'airblade/vim-gitgutter'
 call plug#end()
 
 " LSC configuration
 let g:lsc_auto_map = v:true
-"let g:lsc_server_commands = {'dart': 'dart_language_server_wrapper'}
-let g:lsc_server_commands = {'dart': 'dart_language_server'}
 let g:lsc_preview_split_direction = 'below'
 let g:lsc_enable_apply_edit = v:true
 let g:lsc_enable_incremental_sync = v:true
-augroup completsplitbelow
+highlight lscReference ctermbg=darkgrey
+augroup completsplitbelo
  autocmd User LSCAutocomplete setlocal splitbelow
  autocmd CompleteDone * setlocal nosplitbelow
  autocmd CompleteDone * silent! pclose
@@ -156,3 +156,7 @@ au BufNewFile,BufRead *.html,*.java,*.js,*.c,*.cpp,*.h,*.dart syn spell notoplev
 au BufNewFile,BufRead,BufWritePost,BufEnter,BufLeave *.java,*.js set textwidth=80
 au BufNewFile,BufRead,BufWritePost,BufEnter,BufLeave *.java,*.js,*.dart set cino==j1,+2s,(4,g1,h1
 augroup END
+
+if &diff
+  syntax off
+endif

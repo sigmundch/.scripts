@@ -1,9 +1,11 @@
 #!/bin/bash
-dartfmt=tools/sdks/linux/dart-sdk/bin/dartfmt
+dartfmt=tools/sdks/dart-sdk/bin/dartfmt
 if [[ "$1" == '--be' ]]; then
   dartfmt=out/ReleaseX64/dart-sdk/bin/dartfmt
 elif [[ "$1" == '--golem' ]]; then
   dartfmt=third_party/dart-sdk/bin/dartfmt
+elif [[ "$1" == '--other' ]]; then
+  dartfmt=dartfmt
 fi
 
 git diff $(git merge-base master HEAD) --no-renames --raw \

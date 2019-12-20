@@ -1,5 +1,5 @@
 #!/bin/bash
-vm=tools/sdks/linux/dart-sdk/bin/dart
+vm=tools/sdks/dart-sdk/bin/dart
 normalize=pkg/status_file/bin/normalize.dart
 
 git diff $(git merge-base master HEAD) --no-renames --raw \

@@ -82,9 +82,16 @@ function named_prompt {
   PS1="\[\033[01;31m\]|--[\[\033[0m\]$1\[\033[31;1m\]]\[\033[0m\] "
 }
 
-PS1='\[\033[01;31m\]`if [ \u != $MY_USER ]; then echo "\u "; fi``if [ \h != $MY_MACHINE ]; then echo "[@\h]"; else echo "|"; fi`\[\033[0m\] '
+#PS1='\[\033[01;31m\]`if [ \u != $MY_USER ]; then echo "\u "; fi``if [ \h != $MY_MACHINE ]; then echo "[@\h]"; else echo "|"; fi`\[\033[0m\] '
+#von;
 
-von;
+/usr/bin/powerline-daemon -q
+POWERLINE_COMMAND=/usr/bin/powerline
+POWERLINE_BASH_CONTINUATION=1
+POWERLINE_BASH_SELECT=1
+. /usr/share/powerline/bindings/bash/powerline.sh
+precmd_functions+=(_powerline_setup_prompt)
+
 
 if [ -f $SCRIPT_DIR/bin/bash_completion ]; then
   . $SCRIPT_DIR/bin/bash_completion
@@ -98,26 +105,27 @@ export EDITOR='vim'
 
 # ls with colors
 alias ls='ls --color=auto'
+alias xsclip='xclip -selection clip'
 
 # Dart
 export DART_DRT_HOME=$DART_EDITOR_HOME/chromium/
 #export MY_DART_SDK=$DART_EDITOR_HOME/dart-sdk
-export PATH=$SCRIPT_DIR/bin:~/bin/depot_tools:$PATH:$DART_SDK_HOME/bin:$DART_DRT_HOME:/usr/local/lib/node_modules/:$HOME/bin/
+export PATH=$SCRIPT_DIR/bin:~/bin/depot_tools:$PATH:$DART_SDK_HOME/bin:$DART_DRT_HOME:/usr/local/lib/node_modules/:$HOME/bin/:/usr/local/google/home/sigmund/dart/flutter_development/flutter/bin
 alias dartium=$DART_EDITOR_HOME/chromium/chrome
 alias editor="PATH=$JAVA_HOME/bin:$PATH $DART_EDITOR_HOME/DartEditor"
 export GYP_GENERATORS="ninja,make"
 
 source $SCRIPT_DIR/bin/load_all.sh
 
-function fix_bashrc {
-     vim ~/.bashrc;
-     source ~/.bashrc;
-     echo "~/.bashrc updated";
-}
+#function fix_bashrc {
+#     vim ~/.bashrc;
+#     source ~/.bashrc;
+#     echo "~/.bashrc updated";
+#}
 
-function reload_bashrc {
-     source ~/.bashrc;
-}
+#function reload_bashrc {
+#     source ~/.bashrc;
+#}
 
 function append_and_reload_history {
   history -a; history -c; history -r
@@ -127,8 +135,7 @@ function notify_done {
   notify-send "We are done! $@" -i  $([[ $? == 0 ]] && echo "info" || echo "error")
 }
 
-export GREP_OPTIONS="--color=auto"
-
+alias grep='grep --color=auto'
 alias v='gvim --remote-silent'
 
 # enable us_intl keyboard and toggling with alt+shift:
@@ -156,7 +163,7 @@ function before_command {
   local light_red="[0;38;5;88m"
   echo -e "$red_bold|$light_red--$light_gray start time: $(formatted_date)$none";
 }
-trap 'before_command' DEBUG
+#trap 'before_command' DEBUG
 
 export FZF_DEFAULT_OPTS='-e'
 export GOMA_DIR=$HOME/bin/goma/
