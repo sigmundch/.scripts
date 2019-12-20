@@ -3,7 +3,9 @@
 secs=$(date +%S)
 hour=$(($(date +%k)))
 
-notification_message="$(cat /tmp/.notification)"
+if [[ -e /tmp/.notification ]]; then
+  notification_message="$(cat /tmp/.notification)"
+fi
 if [[ ! -z $notification_message ]]; then
   if [[ $((secs % 2)) -ne 0 ]]; then
     notification_message="notification:  $notification_message              "
@@ -13,6 +15,6 @@ if [[ ! -z $notification_message ]]; then
 fi
 
 # we also used to have: `uptime | sed 's/.*,//'`
-
+keyboard=$(echo $(setxkbmap -query | grep "layout\|variant" | awk '{print toupper($2)}'))
 datetime=$(date +"%T . %D")
-echo "$notification_message$datetime";
+echo "$notification_message [$keyboard] $datetime";
