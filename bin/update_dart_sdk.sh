@@ -5,9 +5,13 @@ if [[ "$DART_SDK_HOME" == "" ]]; then
   exit 1
 fi
 
+gsutil=gsutil
 if [[ `which gsutil` == "" ]]; then
-  echo "Make sure you have installed gsutil and include it in your path"
-  exit 1
+  gsutil=gsutil.py
+  if [[ `which gsutil.py` == "" ]]; then
+    echo "Make sure you have installed gsutil and include it in your path"
+    exit 1
+  fi
 fi
 
 # TODO add also support for:
@@ -75,7 +79,7 @@ function read_version {
 }
 
 function compare {
-  gsutil cp $location/$version/VERSION .
+  $gsutil cp $location/$version/VERSION .
   desired=$(read_version VERSION)
   current=$(read_version LAST_VERSION)
   info "Current version:     $current"
@@ -94,7 +98,7 @@ function update {
     cp VERSION.$desired VERSION
   else
     step "no cached version found: downloading..."
-    gsutil cp $location/$version/sdk/$zipname .
+    $gsutil cp $location/$version/sdk/$zipname .
   fi
 
   if [[ -f $zipname ]]; then
