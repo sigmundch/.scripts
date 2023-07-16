@@ -1,0 +1,2 @@
+#!/bin/bash
+bluetoothctl connect 7C:96:D2:6E:F0:28
