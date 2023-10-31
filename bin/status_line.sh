@@ -19,14 +19,30 @@ keyboard=$(echo $(setxkbmap -query | grep "layout\|variant" | awk '{print touppe
 datetime=$(date +"%T . %D")
 
 raw_temp=$(cat /sys/devices/platform/thinkpad_hwmon/hwmon/hwmon?/temp1_input)
-fan_speed="$(cat /sys/devices/platform/thinkpad_hwmon/hwmon/hwmon?/fan1_input)\U0001F300"
+# 🌀= \U0001F300 , other ideas: 🍃 🔥 🌡
+fan_speed="$(cat /sys/devices/platform/thinkpad_hwmon/hwmon/hwmon?/fan1_input)🌡"
 temp="$(echo $raw_temp | cut -b -2).$(echo $raw_temp | cut -b 3- | cut -b -1)°C"
 battery="$(upower -i /org/freedesktop/UPower/devices/battery_BAT0 | grep percentage | awk '{print $2}')"
-wifi_name="$(nmcli -t -f name c show --active | sed -e 's/Auto //')\U0001F4F6"
+battery_icon="🔋"
+if [[ "$(upower -i /org/freedesktop/UPower/devices/battery_BAT0 | grep state:)" =~ " charging" ]]; then
+  battery_icon="⚡"
+fi
+if [[ "$(upower -i /org/freedesktop/UPower/devices/battery_BAT0 | grep state:)" =~ " pending-charge" ]]; then
+  battery_icon="⚡"
+fi
+# Filter out the loopback wifi interface, and remove "Auto " from the network name.
+# 📶 = \U0001F4F6
+# other options, font doesn't work well 🛜🈻🖧📡 🔌
+wifi_name="$(nmcli -t -f name c show --active | grep -v "lo" | sed -e 's/Auto //')🖧"
 
 if [[ "$(bluetoothctl info 7C:96:D2:6E:F0:28 | grep Connected | sed -e "s/.*Connected: //")" == "yes" ]]; then
   headset="\U0001F3A7"
 else
-  headset="\U0001F50A"
+  if [[ "$(bluetoothctl info E8:07:BF:13:1E:8B | grep Connected | sed -e "s/.*Connected: //")" == "yes" ]]; then
+    headset="\U0001F3A7"
+  else
+    headset="\U0001F50A"
+  fi
 fi
-echo -e "$notification_message [$keyboard] $datetime . $temp $fan_speed $battery\U0001F50B $wifi_name $headset";
+# 🔋 = \U0001F50B
+echo -e "$notification_message [$keyboard] $datetime . $temp . $fan_speed . $battery$battery_icon . $wifi_name . $headset";
